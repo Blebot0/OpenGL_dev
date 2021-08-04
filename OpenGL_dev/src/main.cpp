@@ -1,95 +1,17 @@
 #include <glew.h>
 #include <GLFW/glfw3.h>
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <sstream>
+
 #include "Renderer.h"
 #include "IndexBuffer.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
-
-/***************** Structure to define string of Vertex and Fragment Shaders ***************/
-struct ShaderProgramSource
-{
-    std::string VertexSource;
-    std::string FragmentSource;
-};
-
-/***************** Function to Parse values from a filepath to extract Vertex and Fragment Shaders ***************/
-static ShaderProgramSource ParseShader(const std::string& filepath) {
-    enum class ShaderType {
-        NONE = -1,
-        VERTEX = 0,
-        FRAGMENT = 1
-    };
-
-    ShaderType type = ShaderType::NONE;
+#include "Shader.h"
 
 
-    std::ifstream stream(filepath);
 
-    std::string line;
-    std::stringstream ss[2];
-    while (std::getline(stream, line)) {
 
-        if (line.find("#shader") != std::string::npos) {
 
-            if (line.find("vertex") != std::string::npos) {
-                type = ShaderType::VERTEX;
-            }
-            else if (line.find("fragment") != std::string::npos) {
-                type = ShaderType::FRAGMENT;
-            }
-        }
 
-        else {
-            ss[(int)type] << line << '\n';
-        }
-    }
-    return { ss[0].str(), ss[1].str() };
-}
-/********************* Function to Compile Shaders ******************************/
-static unsigned int CompileShader(unsigned int type, const std::string& source) {
-
-    unsigned int id = glCreateShader(type);
-    const char* src = source.c_str();
-    glShaderSource(id, 1, &src, nullptr);
-    glCompileShader(id);
-
-    int result;
-    glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-
-    if (result == GL_FALSE) {
-
-        std::cout << "FAILED TO COMPILE SHADER\n";
-
-        glDeleteShader(id);
-
-        return 0;
-    }
-    return id;
-}
-
-/********************* Function to Create Shaders ******************************/
-static unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader) {
-
-    unsigned int program = glCreateProgram();
-    unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
-    unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
-
-    glAttachShader(program, vs);
-    glAttachShader(program, fs);
-    glLinkProgram(program);
-
-    glValidateProgram(program);
-
-    glDeleteShader(vs);
-    glDeleteShader(fs);
-
-    return program;
-
-}
 
 int main(void)
 {
