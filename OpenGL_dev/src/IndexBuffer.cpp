@@ -33,7 +33,4 @@ void IndexBuffer::Unbind() const
 
 }
 
-inline unsigned int IndexBuffer::GetCount() const
-{
-    return m_Count;
-}
+

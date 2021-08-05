@@ -19,12 +19,4 @@ bool GLLogCall(const char* function, const char* file, int line) {
     return true;
 }
 
-//void Renderer::Draw(const Shader& shader, const VertexArray& va, const IndexBuffer& ib) const
-//{
-//    shader.Bind();
-//    va.Bind();
-//    ib.Bind();
-//
-//    GLCall(glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
-//
-//}
+

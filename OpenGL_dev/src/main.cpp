@@ -7,6 +7,7 @@
 #include "VertexArray.h"
 #include "VertexBufferLayout.h"
 #include "Shader.h"
+#include "Model.h"
 
 int main(void)
 {
@@ -54,7 +55,8 @@ int main(void)
         VertexArray va;
         VertexBuffer vb(positions, 8 * sizeof(float));
         VertexBufferLayout layout;
-
+        
+        Model model;
         layout.Push<float>(2);
         va.AddBuffer(vb, layout);
 
@@ -83,6 +85,9 @@ int main(void)
             shader.Bind();
             shader.SetUniform4f("u_Color", r, 0.0f, 0.0f, 1.0f);
 
+            model.Draw(va, ib, shader);
+
+
             if (r > 1.0f)
                 increment -= 0.05f;
             else if (r < 0.0f) {
@@ -91,9 +96,6 @@ int main(void)
 
             r += increment;
 
-            va.Bind();
-            ib.Bind();
-            GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
             /********************* Swap front and back buffers *********************/
             glfwSwapBuffers(window);
