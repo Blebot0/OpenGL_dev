@@ -5,13 +5,8 @@
 #include "IndexBuffer.h"
 #include "VertexBuffer.h"
 #include "VertexArray.h"
+#include "VertexBufferLayout.h"
 #include "Shader.h"
-
-
-
-
-
-
 
 int main(void)
 {
@@ -55,7 +50,7 @@ int main(void)
             2, 3, 0
         };
 
-
+        
         VertexArray va;
         VertexBuffer vb(positions, 8 * sizeof(float));
         VertexBufferLayout layout;
@@ -66,15 +61,18 @@ int main(void)
 
         IndexBuffer ib(indices, 6);
 
-        ShaderProgramSource source = ParseShader("resources/shaders/basic.shader");
-        unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
-        glUseProgram(shader);
+        Shader shader("resources/shaders/basic.shader");
+        shader.Bind();
 
-        int location = glGetUniformLocation(shader, "u_Color");
-        ASSERT(location != -1);
 
         float r = 0.00f, g = 0.00f, b = 0.00f, increment = 0.05f;
+        
+        shader.SetUniform4f("u_Color", 0.8f, 0.0f, 0.0f, 1.0f);
 
+        va.Unbind();
+        shader.Unbind();
+        vb.Unbind();
+        ib.Unbind();
         /***************** Loop until the user closes the window ****************/
         while (!glfwWindowShouldClose(window))
         {
@@ -82,7 +80,8 @@ int main(void)
             glClear(GL_COLOR_BUFFER_BIT);
 
             /************************ Changning Colours in Runtime using Uniform ****************/
-            GLCall(glUniform4f(location, r, 0.0f, 0.0f, 1.0f));
+            shader.Bind();
+            shader.SetUniform4f("u_Color", r, 0.0f, 0.0f, 1.0f);
 
             if (r > 1.0f)
                 increment -= 0.05f;
@@ -102,9 +101,6 @@ int main(void)
             /********************** Poll for and process events ********************/
             glfwPollEvents();
         }
-
-        /********************** Deleting Shaders ********************/
-        glDeleteProgram(shader);
 
     }
     glfwTerminate();

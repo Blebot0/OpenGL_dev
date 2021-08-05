@@ -3,8 +3,8 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <unordered_map>
 #include "Renderer.h"
-
 
 /***************** Structure to define string of Vertex and Fragment Shaders ***************/
 struct ShaderProgramSource
@@ -32,8 +32,9 @@ public:
 private:
 
 	std::string m_FilePath;
+	std::unordered_map<std::string, int> m_UniformLocationCache;
 	unsigned int m_RendererID;
-	unsigned int GetUniformLocation(const std::string& name);
+	int GetUniformLocation(const std::string& name);
 
 	unsigned int CompileShader(unsigned int type, const std::string& source);
 	ShaderProgramSource ParseShader(const std::string& filepath);
