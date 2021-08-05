@@ -9,3 +9,9 @@ void Model::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& sha
 	GLCall(glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
 
 }
+
+void Model::Clear() const
+{
+	/**************** Render here *********************/
+	GLCall( glClear(GL_COLOR_BUFFER_BIT));
+}
