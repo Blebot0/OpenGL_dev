@@ -5,7 +5,7 @@
 #include <sstream>
 #include <unordered_map>
 #include "Renderer.h"
-
+#include "glm/glm.hpp"
 /***************** Structure to define string of Vertex and Fragment Shaders ***************/
 struct ShaderProgramSource
 {
@@ -29,6 +29,7 @@ public:
 	// Set Uniforms
 	void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
 	void SetUniform1i(const std::string& name, int value);
+	void SetUniformMat4(const std::string& name, const glm::mat4& matrix);
 private:
 
 	std::string m_FilePath;

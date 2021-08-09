@@ -9,6 +9,10 @@
 #include "Shader.h"
 #include "Model.h"
 #include "Texture.h"
+
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
 int main(void)
 {
     GLFWwindow* window;
@@ -51,6 +55,8 @@ int main(void)
             2, 3, 0
         };
 
+
+
         GLCall(glEnable(GL_BLEND));
         GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
@@ -68,12 +74,15 @@ int main(void)
 
         IndexBuffer ib(indices, 6);
 
+        glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+
+
         Shader shader("resources/shaders/basic.shader");
         shader.Bind();
         //shader.SetUniform4f("u_Color", 0.8f, 0.0f, 0.0f, 1.0f);
+        shader.SetUniformMat4("u_MVP", proj);
 
-
-        Texture texture("resources/textures/youtube.png");
+        Texture texture("resources/textures/github.png");
         texture.Bind();
         shader.SetUniform1i("u_Texture", 0);
 
