@@ -8,7 +8,7 @@
 #include "VertexBufferLayout.h"
 #include "Shader.h"
 #include "Model.h"
-
+#include "Texture.h"
 int main(void)
 {
     GLFWwindow* window;
@@ -40,10 +40,10 @@ int main(void)
         float positions[] = {
             // Each line is a vertex 
             // Here we are just using vertex position as the only attribute
-            -0.5f, -0.5f,
-             0.5f, -0.5f,
-             0.5f,  0.5f,
-            -0.5f,  0.5f,
+            -0.5f, -0.5f, 0.0f, 0.0f,
+             0.5f, -0.5f, 1.0f, 0.0f,
+             0.5f,  0.5f, 1.0f, 1.0f,
+            -0.5f,  0.5f, 0.0f, 1.0f
         };
 
         unsigned int indices[] = {
@@ -51,13 +51,18 @@ int main(void)
             2, 3, 0
         };
 
-        
+        GLCall(glEnable(GL_BLEND));
+        GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
         VertexArray va;
-        VertexBuffer vb(positions, 8 * sizeof(float));
+        VertexBuffer vb(positions, 4 * 4 * sizeof(float));
         VertexBufferLayout layout;
         
         Model model;
+        
         layout.Push<float>(2);
+        layout.Push<float>(2);
+
         va.AddBuffer(vb, layout);
 
 
@@ -65,35 +70,36 @@ int main(void)
 
         Shader shader("resources/shaders/basic.shader");
         shader.Bind();
+        //shader.SetUniform4f("u_Color", 0.8f, 0.0f, 0.0f, 1.0f);
 
 
-        float r = 0.00f, g = 0.00f, b = 0.00f, increment = 0.05f;
+        Texture texture("resources/textures/youtube.png");
+        texture.Bind();
+        shader.SetUniform1i("u_Texture", 0);
+
+        float r = 0.00f, increment = 0.05f;
         
-        shader.SetUniform4f("u_Color", 0.8f, 0.0f, 0.0f, 1.0f);
 
-        va.Unbind();
-        shader.Unbind();
-        vb.Unbind();
-        ib.Unbind();
         /***************** Loop until the user closes the window ****************/
         while (!glfwWindowShouldClose(window))
         {
             model.Clear();
 
             /************************ Changning Colours in Runtime using Uniform ****************/
-            shader.Bind();
-            shader.SetUniform4f("u_Color", r, 0.0f, 0.0f, 1.0f);
+            //shader.Bind();
+            //shader.SetUniform4f("u_Color", r, 0.0f, 0.0f, 1.0f);
+            //shader.SetUniform1i("u_Texture", 0);
 
             model.Draw(va, ib, shader);
 
 
-            if (r > 1.0f)
-                increment -= 0.05f;
-            else if (r < 0.0f) {
-                increment += 0.05f;
-            }
+            ////if (r > 1.0f)
+            //    increment -= 0.05f;
+            //else if (r < 0.0f) {
+            //    increment += 0.05f;
+            //}
 
-            r += increment;
+            //r += increment;
 
 
             /********************* Swap front and back buffers *********************/

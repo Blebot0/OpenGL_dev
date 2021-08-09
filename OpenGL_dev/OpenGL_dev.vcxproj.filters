@@ -76,4 +76,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\textures\github.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\youtube.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>
